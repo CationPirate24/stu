@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.java.mapper.StuClassMapper">
+	
+	<resultMap type="StuClass" id="StuClassMap">
+		<result property="classId" column="CLASS_ID"/>
+		<result property="classGrade" column="CLASS_GRADE"/>
+		<result property="className" column="CLASS_NAME"/>
+		<result property="classNumber" column="CLASS_NUMBER"/>
+	</resultMap>
+	
+	
+	<!-- 查询所有班级数量  -->
+	<select id="getAllCount" resultType="Integer">
+		SELECT COUNT(*) FROM STU_CLASS
+	</select>
+	<!-- 分页查询  -->
+	<select id="getPage" parameterType="page" resultMap="StuClassMap">
+		SELECT * FROM (SELECT ROWNUM m,sc.* FROM STU_CLASS sc WHERE NAME LIKE '%${con}%' AND ROWNUM &lt;= #{paginalCount}*#{currentPage})
+		temp WHERE temp.m>(#{currentPage}-1)*#{paginalCount}
+	</select>
+	
+	
+	<!-- 查询某个班级  -->
+	<select id="getById" parameterType="String" resultMap="StuClassMap">
+		SELECT * FROM STU_CLASS WHERE CLASS_ID=#{classId}
+	</select>
+	
+	<!-- 按年级查询  -->
+	<select id="getByClassGrade" parameterType="String" resultMap="StuClassMap">
+		SELECT * FROM STU_CLASS WHERE CLASS_GRADE=#{classGrade}
+	</select>
+	
+	<!-- 新增一个班级  -->
+	<insert id="add" parameterType="stuClass">
+		INSERT INTO STU_CLASS VALUES(#{classId},#{classGrade},#{className},#{classNumber})
+	</insert>
+	
+	<!-- 删除一个班级  -->
+	<delete id="delete" parameterType="String">
+		DELETE FROM STU_CALSS WHERE CLASS_ID=#{classId}
+	</delete>
+	
+	<!-- 修改班级信息  -->
+	<update id="update" parameterType="stuClass">
+		UPDATE STU_CLASS
+		<set>
+			<if test="classGrade!=null and classGrade!=''">
+				CLASS_GRADE=#{classGrade}
+			</if>
+			<if test="className!=null and className!=''">
+				CLASS_NAME=#{className}
+			</if>
+			<if test="classNumber!=null and classNumber!=''">
+				CLASS_NUMBER=#{classNumber}
+			</if>
+		</set>
+		WHERE CLASS_ID=#{classId}
+	</update>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

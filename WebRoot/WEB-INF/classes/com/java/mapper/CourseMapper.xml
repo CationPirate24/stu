@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.java.mapper.CourseMapper">
+	
+	<resultMap type="course" id="courseMap">
+		<result property="courseId" column="COURSE_ID"/>
+		<result property="courseName" column="COURSE_NAME"/>
+		<result property="gredit" column="GREDIT"/>
+	</resultMap>
+	
+	<!-- 查询所有成绩记录  -->
+	<select id="getAllCount" resultType="Integer">
+		SELECT COUNT(*) FROM COURSE
+	</select>
+	<!-- 分页查询  -->
+	<select id="getPage" parameterType="page" resultMap="courseMap">
+		SELECT * FROM (SELECT ROWNUM m,c.* FROM COURSE c WHERE NAME LIKE '%${con}%' AND ROWNUM &lt;= #{paginalCount}*#{currentPage})
+		temp WHERE temp.m>(#{currentPage}-1)*#{paginalCount}
+	</select>
+	
+	
+	<!-- 查询某个课程  -->
+	<select id="getById" parameterType="String" resultMap="courseMap">
+		SELECT * FROM COURSE WHERE COURSE_ID=#{courseId}
+	</select>
+	
+	<!-- 按学分查  -->
+	<select id="getByGredit" parameterType="String" resultMap="courseMap">
+		SELECT * FROM COURSE WHERE GREDIT=#{gredit}
+	</select>
+	
+	
+	
+	<!-- 增加新的课程  -->
+	<insert id="add" parameterType="course">
+		INSERT INTO COURSE VALUES(#{courseId},#{courseName},#{gredit})
+	</insert>
+	
+	<!-- 删除课程  -->
+	<delete id="delete" parameterType="String">
+		DELETE FROM COURSE WHERE COURSE_ID=#{courseId}
+	</delete>
+	
+	<!-- 修改课程信息  -->
+	<update id="update" parameterType="course">
+		UPDATE COURSE
+		<set>
+			<if test="courseName!=null and courseName!=''">
+				COURSE_NAME=#{courseName}
+			</if>
+			<if test="gredit!=null and gredit''">
+				GREDIT=#{gredit}
+			</if>
+		</set>
+		WHERE COURSE_ID=#{courseId}
+	</update>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

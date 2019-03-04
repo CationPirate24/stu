@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.java.mapper.StudentCourseMapper">
+	
+	<resultMap type="studentCourse" id="studentCourseMap">
+		<result property="courseId" column="COURSE_ID"/>
+		<result property="studentId" column="STUDENT_ID"/>
+		<result property="grade" column="GRADE"/>
+		<result property="semester" column="SEMESTER"/>
+		<result property="schoolYear" column="SCHOOL_YEAR"/>
+	</resultMap>
+	
+	
+	<!-- 查询所有成绩记录  -->
+	<select id="getAllCount" resultType="Integer">
+		SELECT COUNT(*) FROM STUDENT_COURSE
+	</select>
+	<!-- 分页查询  -->
+	<select id="getPage" parameterType="page" resultMap="studentCourseMap">
+		SELECT * FROM (SELECT ROWNUM m,sc.* FROM STUDENT_COURSE sc WHERE NAME LIKE '%${con}%' AND ROWNUM &lt;= #{paginalCount}*#{currentPage})
+		temp WHERE temp.m>(#{currentPage}-1)*#{paginalCount}
+	</select>
+	
+	
+	<!-- 按课程查询  -->
+	<select id="getById" parameterType="String" resultMap="studentCourseMap">
+		SELECT * FROM STUDENT_COURSE WHERE COURSE_ID=#{courseId}
+	</select>
+	
+	<!-- 按学号查询  -->
+	<select id="getByStudentId" parameterType="String" resultMap="studentCourseMap">
+		SELECT * FROM STUDENT_COURSE WHERE STUDENT_ID=#{studentId}
+	</select>
+	
+	<!-- 按学年和学期查询  -->
+	<select id="getStudentsGrades" parameterType="String" resultMap="studentCourseMap">
+		SELECT * FROM STUDENT_COURSE WHERE SEMESTER=#{semester} AND SCHOOL_YEAR=#{schoolYear}
+	</select>
+	
+	
+	<!-- 新录入一条成绩  -->
+	<insert id="add" parameterType="studentCourse">
+		INSERT INTO STUDENT_COURSE VSLUES(#{courseId},#{studentId},#{grade},#{semester},#{schoolYear})
+	</insert>
+	
+	<!-- 删除一条成绩  -->
+	<delete id="delete" parameterType="String">
+		DELETE FROM STUDENT_COURSE WHERE COURSE_ID=#{courseId}
+	</delete>
+	
+	<!-- 修改成绩信息  -->
+	<update id="update" parameterType="studentCourse">
+		UPDATE STUDENT_COURSE
+		<set>
+			<if test="studentId!=null and studentId!=''">
+				STUDENT_ID=#{studentId}
+			</if>
+			<if test="grade!=null and grade!=''">
+				GRADE=#{grade}
+			</if>
+			<if test="semester!=null and semester!=''">
+				SEMESTER=#{semester}
+			</if>
+			<if test="schoolYear!=null and schoolYear!=''">
+				SCHOOL_YEAR=#{schoolYear}
+			</if>
+		</set>
+		WHERE COURSE_ID=#{courseId}
+	</update>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

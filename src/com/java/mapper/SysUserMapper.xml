@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.java.mapper.SysUserMapper">
+	
+	<resultMap type="sysUser" id="sysUserMap">
+		<result property="userId" column="USER_ID"/>
+		<result property="userName" column="USER_NAME"/>
+		<result property="password" column="PASSWORD"/>
+		<result property="userRole" column="USER_ROLE"/>
+	</resultMap>
+	
+	
+	<!-- 查询所有用户数量  -->
+	<select id="getAllCount" resultType="Integer">
+		SELECT COUNT(*) FROM SYS_USER
+	</select>
+	<!-- 分页查询  -->
+	<select id="getPage" parameterType="page" resultMap="sysUserMap">
+		SELECT * FROM (SELECT ROWNUM m,su.* FROM SYS_USER su WHERE NAME LIKE '%${con}%' AND ROWNUM &lt;= #{paginalCount}*#{currentPage})
+		temp WHERE temp.m>(#{currentPage}-1)*#{paginalCount}
+	</select>
+	
+	<!-- 用户登录  -->
+	<select id="checkLogin" parameterType="String" resultMap="sysUserMap">
+		SELECT * FROM SYS_USER WHERE USER_NAME=#{userName} AND PASSWORD=#{password}
+	</select>
+	
+	
+	<!-- 查看用户信息  -->
+	<select id="getById" parameterType="String" resultMap="sysUserMap">
+		SELECT * FROM SYS_USER WHERE USER_ID=#{userId}
+	</select>
+	
+	<!-- 注册用户  -->
+	<insert id="add" parameterType="sysUser">
+		INSERT INTO SYS_USER VALUES(#{userId},#{userName},#{password},#{userRole})
+	</insert>
+	
+	<!-- 删除用户  -->
+	<delete id="delete" parameterType="String">
+		DELETE FROM SYS_USER WHERE USER_ID=#{userId}
+	</delete>
+	
+	<!-- 修改用户信息  -->
+	<update id="update" parameterType="sysUser">
+		UPDATE SYS_USER
+		<set>
+			<if test="userName!=null and userName!=''">
+				USER_NAME=#{userName}
+			</if>
+			<if test="password!=null and password!=''">
+				PASSWORD=#{password}
+			</if>
+			<if test="userRole!=null and userRole!=''">
+				USER_ROLE=#{userRole}
+			</if>
+		</set>
+		WHERE USER_ID=#{userId}
+	</update>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

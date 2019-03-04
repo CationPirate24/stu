@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.java.mapper.StudentMapper">
+	
+	<resultMap type="student" id="studentMap">
+		<result property="studentId" column="STUDENT_ID"/>
+		<result property="name" column="NAME"/>
+		<result property="birthDate" column="BIRTH_DATE"/>
+		<result property="sex" column="SEX"/>
+		<result property="classId" column="CLASS_ID"/>
+		<result property="entranceDate" column="ENTRANCE_DATE"/>
+		<result property="nation" column="NATION"/>
+		<result property="homeAddress" column="HOME_ADDRESS"/>
+		<result property="politics" column="POLITICS"/>
+		<result property="id" column="ID"/>
+		<result property="major" column="MAJOR"/>
+	</resultMap>
+	
+	
+	<!-- 查询所有学生数量  -->
+	<select id="getAllCount" resultType="Integer">
+		SELECT COUNT(*) FROM STUDENT
+	</select>
+	<!-- 分页查询  -->
+	<select id="getPage" parameterType="page" resultMap="studentMap">
+		SELECT * FROM (SELECT ROWNUM m,s.* FROM STUDENT s WHERE NAME LIKE '%${con}%' AND ROWNUM &lt;= #{paginalCount}*#{currentPage})
+		temp WHERE temp.m>(#{currentPage}-1)*#{paginalCount}
+	</select>
+	
+	
+	<!-- 查询所有学生  -->
+	<select id="getAll" parameterType="String" resultMap="studentMap">
+		SELECT * FROM STUDENT WHERE NAME LIKE '%${_parameter}%'
+	</select>
+	
+	<!-- 查看某个学生信息  -->
+	<select id="getById" parameterType="String" resultMap="studentMap">
+		SELECT * FROM STUDENT WHERE STUDENT_ID=#{studentId}
+	</select>
+	
+	<!-- 按性别查询  -->
+	<select id="getBySex" parameterType="String" resultMap="studentMap">
+		SELECT * FROM STUDENT WHERE SEX=#{sex}
+	</select>
+	
+	<!-- 按班级查询  -->
+	<select id="getByClassId" parameterType="String" resultMap="studentMap">
+		SELECT * FROM STUDENT WHERE CLASS_ID=#{ClassId}
+	</select>
+	
+	<!-- 按专业查询  -->
+	<select id="getByMajor" parameterType="String" resultMap="studentMap">
+		SELECT * FROM STUDENT WHERE MAJOR=#{major}
+	</select>
+	
+	
+	<!-- 增加新的学生信息  -->
+	<insert id="add" parameterType="student">
+		INSERT INTO STUDENT VALUES(#{studentId},#{name},#{birthDate},#{sex},#{classId},
+		#{entranceDate},#{nation},#{homeAddress},#{politics},#{id},#{major})
+	</insert>
+	
+	<!-- 删除学生信息  -->
+	<delete id="delete" parameterType="String">
+		DELETE FROM STUDENT WHERE STUDENT_ID=#{studentId}
+	</delete>
+	
+	
+	<!-- 修改某个学生信息  -->
+	<update id="update" parameterType="student">
+		UPDATE STUDENT
+		<set>
+			<if test="name!=null and name!=''">
+				NAME=#{name}
+			</if>
+			<if test="birthDate!=null and birthDate!=''">
+				BIRTH_DATE=#{birthDate}
+			</if>
+			<if test="sex!=null and sex!=''">
+				SEX=#{sex}
+			</if>
+			<if test="classId!=null and classId!=''">
+				CLASS_ID=#{classId}
+			</if>
+			<if test="entranceDate!=null and entranceDate!=''">
+				ENTRANCE_DATE=#{entranceDate}
+			</if>
+			<if test="nation!=null and nation!=''">
+				NATION=#{nation}
+			</if>
+			<if test="homeAddress!=null and homeAddress!=''">
+				HOME_ADDRESS=#{homeAddress}
+			</if>
+			<if test="politics!=null and politics!=''">
+				POLITICS=#{politics}
+			</if>
+			<if test="id!=null and id!=''">
+				ID=#{id}
+			</if>
+			<if test="major!=null and major!=''">
+				MAJOR=#{major}
+			</if>
+		</set>
+		WHERE STUDENT_ID=#{studentId}
+	</update>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

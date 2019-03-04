@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.java.mapper.CoodMapper">
+	
+	<resultMap type="cood" id="coodMap">
+		<result property="coodId" column="COOD_ID"/>
+		<result property="coodKey" column="COOD_KEY"/>
+		<result property="coodValue" column="COOD_VALUE"/>
+		<result property="coodType" column="COOD_TYPE"/>
+	</resultMap>
+	
+	<!-- 查询某条记录  -->
+	<select id="getValueByKeyAndType" parameterType="String" resultMap="coodMap">
+		SELECT * FROM COOD WHERE COOD_KEY=#{coodKey} AND COOD_TYPE=#{coodType}
+	</select>
+	
+	<!-- 查询某种类型的所有记录  -->
+	<select id="getCoodByType" parameterType="String" resultMap="coodMap">
+		SELECT * FROM COOD WHERE COOD_TYPE=#{coodType}
+	</select>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
